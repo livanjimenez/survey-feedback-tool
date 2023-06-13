@@ -5,11 +5,7 @@ import { WriteInQuestion } from "./WriteInQuestion";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { StarRatingQuestion } from "./StarRatingQuestion";
 
-import {
-  QuestionData,
-  QuestionType,
-  QuestionProps,
-} from "../types/SurveyFormTypes";
+import { QuestionData, QuestionType } from "../types/SurveyFormTypes";
 
 type FormData = {
   type: QuestionType;

@@ -18,6 +18,7 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
     handleSubmit,
     control,
     formState: { errors },
+    reset,
     watch,
   } = useForm<QuestionData>({
     defaultValues: {
@@ -28,6 +29,7 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
   });
 
   const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -49,7 +51,14 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
         answerType: data.answerType,
       });
 
-      onSubmit(data);
+      setQuestions([...questions, data]);
+
+      // Reset the form
+      reset({
+        question: "",
+        choices: [{ text: "" }],
+        answerType: "radio",
+      });
     } catch (error) {
       console.error("Error submitting question: ", error);
     } finally {
@@ -57,9 +66,9 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
     }
   };
 
-  // const handleAddChoice = () => {
-  //   append({ text: "" } as ChoiceData);
-  // };
+  const handleFinish = () => {
+    onSubmit(questions);
+  };
 
   const handleAddChoice = () => {
     if (fields.length < 4) {
@@ -150,6 +159,9 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
       </form>
       <button onClick={onBack} className="button mt-4">
         Back to Question Types
+      </button>
+      <button onClick={handleFinish} className="button mt-4">
+        Finish
       </button>
 
       <MultipleChoiceQuestionPreview data={currentData} />

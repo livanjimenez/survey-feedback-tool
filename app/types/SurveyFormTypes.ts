@@ -22,10 +22,38 @@ export interface QuestionData {
 }
 
 export interface QuestionProps {
-  onSubmit: (data: QuestionData) => void;
+  question: QuestionData;
+  onSubmit: (data: QuestionData[]) => void;
   onBack: () => void;
 }
 
 export interface ChoiceData {
   text: string;
+}
+
+export interface AppearanceData {
+  bgColor: string;
+  fontColor: string;
+  isGradient: boolean;
+}
+
+export interface SurveyAppearanceProps {
+  onNext: (data: AppearanceData) => void;
+  onBack: () => void;
+}
+
+export interface Question {
+  type: QuestionType;
+  data: QuestionData;
+}
+
+export interface Appearance {
+  data: AppearanceData;
+}
+
+export interface SurveyData {
+  title: string;
+  description: string;
+  questions: Question[];
+  appearance: Appearance;
 }
