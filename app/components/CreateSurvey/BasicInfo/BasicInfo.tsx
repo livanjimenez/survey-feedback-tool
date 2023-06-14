@@ -1,8 +1,8 @@
 import "../styles/surveyStyles.css";
 import "../styles/loading.css";
-import { BasicInfoProps } from "../types/SurveyFormTypes";
+import { BasicInfoProps } from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseClient";
+import { db } from "../../../firebase/firebaseClient";
 
 export function BasicInfo({
   title,

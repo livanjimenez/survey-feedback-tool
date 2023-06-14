@@ -1,10 +1,12 @@
 "use client";
-import { BasicInfo } from "./BasicInfo";
-import { QuestionTypeSelection } from "./QuestionTypeSelection";
+import { BasicInfo } from "./BasicInfo/BasicInfo";
+import { QuestionTypeSelection } from "./SelectQuestionType/QuestionTypeSelection";
 import { useState } from "react";
-import { QuestionData, QuestionType } from "../types/SurveyFormTypes";
-import SurveyAppearance, { AppearanceData } from "./SurveyAppearance";
-import PublishSurvey from "./PublishSurvey";
+import { QuestionData, QuestionType } from "../../types/SurveyFormTypes";
+import SurveyAppearance, {
+  AppearanceData,
+} from "./Appearance/SurveyAppearance";
+import PublishSurvey from "./Publish/PublishSurvey";
 
 interface Question {
   type: QuestionType;

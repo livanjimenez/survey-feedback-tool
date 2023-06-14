@@ -2,9 +2,9 @@ import { useState } from "react";
 import {
   SurveyAppearanceProps,
   AppearanceData,
-} from "../types/SurveyFormTypes";
+} from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseClient";
+import { db } from "../../../firebase/firebaseClient";
 
 const SurveyAppearance: React.FC<SurveyAppearanceProps> = ({
   onNext,

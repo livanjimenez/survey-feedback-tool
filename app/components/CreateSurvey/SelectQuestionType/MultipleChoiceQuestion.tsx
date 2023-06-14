@@ -4,9 +4,9 @@ import {
   QuestionProps,
   QuestionData,
   ChoiceData,
-} from "../types/SurveyFormTypes";
+} from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseClient";
+import { db } from "../../../firebase/firebaseClient";
 import { MultipleChoiceQuestionPreview } from "./MultipleChoiceQuestionPreview";
 
 const MultipleChoiceQuestion: React.FC<QuestionProps> = ({

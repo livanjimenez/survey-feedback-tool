@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { QuestionProps, QuestionData } from "../types/SurveyFormTypes";
+import { QuestionProps, QuestionData } from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebaseClient";
+import { db } from "../../../firebase/firebaseClient";
 
-const StarRatingQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
+const WriteInQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
   const {
     register,
     handleSubmit,
@@ -14,14 +14,13 @@ const StarRatingQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
     try {
       // Create a new document in Firestore
       const questionId = Date.now().toString();
-      const docRef = doc(db, "starRatingQuestion", questionId);
+      const docRef = doc(db, "writeInQuestion", questionId);
 
       await setDoc(docRef, {
         question: data.question,
       });
 
       onSubmit(data);
-      // onBack();
     } catch (error) {
       console.error("Error submitting question: ", error);
     }
@@ -42,4 +41,4 @@ const StarRatingQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
   );
 };
 
-export { StarRatingQuestion };
+export { WriteInQuestion };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { db } from "../firebase/firebaseClient";
+import { db } from "../../../firebase/firebaseClient";
 import { doc, setDoc } from "firebase/firestore";
-import { Question, Appearance } from "../types/SurveyFormTypes";
+import { Question, Appearance } from "../../../types/SurveyFormTypes";
 
 interface PublishSurveyProps {
   surveyData: {

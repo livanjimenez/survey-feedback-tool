@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { db } from "../firebase/firebaseClient";
+import { db } from "../../firebase/firebaseClient";
 import { doc, getDoc } from "firebase/firestore";
-import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
-import { StarRatingQuestion } from "./StarRatingQuestion";
-import { WriteInQuestion } from "./WriteInQuestion";
+import { MultipleChoiceQuestion } from "../CreateSurvey/SelectQuestionType/MultipleChoiceQuestion";
+import { StarRatingQuestion } from "../CreateSurvey/SelectQuestionType/StarRatingQuestion";
+import { WriteInQuestion } from "../CreateSurvey/SelectQuestionType/WriteInQuestion";
 
-import { SurveyData, Question, Appearance } from "../types/SurveyFormTypes";
+import { SurveyData, Question, Appearance } from "../../types/SurveyFormTypes";
 
 export default function Survey() {
   const router = useRouter();

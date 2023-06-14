@@ -1,4 +1,4 @@
-import { QuestionData } from "../types/SurveyFormTypes";
+import { QuestionData } from "../../../types/SurveyFormTypes";
 
 interface QuestionPreviewProps {
   data: QuestionData | null;
