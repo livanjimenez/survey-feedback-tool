@@ -22,7 +22,7 @@ export interface QuestionData {
 }
 
 export interface QuestionProps {
-  question: QuestionData;
+  // question: QuestionData;
   onSubmit: (data: QuestionData[]) => void;
   onBack: () => void;
 }

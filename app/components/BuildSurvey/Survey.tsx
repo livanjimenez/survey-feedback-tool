@@ -1,16 +1,17 @@
+"use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { db } from "../../firebase/firebaseClient";
 import { doc, getDoc } from "firebase/firestore";
-import { MultipleChoiceQuestion } from "../CreateSurvey/SelectQuestionType/MultipleChoiceQuestion";
-import { StarRatingQuestion } from "../CreateSurvey/SelectQuestionType/StarRatingQuestion";
-import { WriteInQuestion } from "../CreateSurvey/SelectQuestionType/WriteInQuestion";
+import { SurveyMultipleChoiceQuestion } from "./SurveyMultipleChoiceQuestion";
+import { SurveyStarRatingQuestion } from "./SurveyStarRatingQuestion";
+import { SurveyWriteInQuestion } from "./SurveyWriteInQuestion";
 
 import { SurveyData, Question, Appearance } from "../../types/SurveyFormTypes";
 
 export default function Survey() {
-  const router = useRouter();
-  const { id } = router.query;
+  const pathname = usePathname();
+  const id = pathname.split("/")[3]; // Assuming the structure is /app/survey/{id}/page
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function Survey() {
     fetchData();
   }, [id]);
 
-  if (!surveyData) return "Loading..."; // replace with a proper loading indicator
+  if (!surveyData) return "Loading..."; //replace with a proper loading indicator
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,14 +52,22 @@ export default function Survey() {
           switch (question.type) {
             case "multipleChoice":
               return (
-                <MultipleChoiceQuestion key={index} question={question.data} />
+                <SurveyMultipleChoiceQuestion
+                  key={index}
+                  question={question.data}
+                />
               );
             case "starRating":
               return (
-                <StarRatingQuestion key={index} question={question.data} />
+                <SurveyStarRatingQuestion
+                  key={index}
+                  question={question.data}
+                />
               );
             case "writeIn":
-              return <WriteInQuestion key={index} question={question.data} />;
+              return (
+                <SurveyWriteInQuestion key={index} question={question.data} />
+              );
             default:
               return null;
           }

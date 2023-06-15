@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { QuestionProps, QuestionData } from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
@@ -10,6 +11,8 @@ const StarRatingQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
     formState: { errors },
   } = useForm<QuestionData>();
 
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
+
   const handleFormSubmit = async (data: QuestionData) => {
     try {
       // Create a new document in Firestore
@@ -20,7 +23,9 @@ const StarRatingQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
         question: data.question,
       });
 
-      onSubmit(data);
+      setQuestions([...questions, data]);
+
+      onSubmit(questions);
       // onBack();
     } catch (error) {
       console.error("Error submitting question: ", error);

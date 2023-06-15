@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import "../styles/surveyStyles.css";
+import "../../../styles/surveyStyles.css";
 import { WriteInQuestion } from "./WriteInQuestion";
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion";
 import { StarRatingQuestion } from "./StarRatingQuestion";
@@ -27,7 +27,9 @@ export function QuestionTypeSelection({
     setType(data.type);
   };
 
-  const handleQuestionSubmit = (question: QuestionData) => {
+  const handleQuestionSubmit = (questions: QuestionData[]) => {
+    // If you only expect one question, you can simply take the first one
+    const question = questions[0];
     onSelection(type as QuestionType, question);
     setType(""); // reset type after question is added
   };
