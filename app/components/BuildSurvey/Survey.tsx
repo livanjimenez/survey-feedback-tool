@@ -19,6 +19,7 @@ export default function Survey() {
   const id = pathname.split("/")[2]; // Assuming the structure is /app/survey/{id}/page
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
   const [responses, setResponses] = useState<Record<number, any>>({});
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const handleResponseChange = (questionIndex: number, response: any) => {
     setResponses((prevResponses) => ({
@@ -59,6 +60,7 @@ export default function Survey() {
     });
 
     console.log("Document written with ID: ", docRef.id);
+    setIsSubmitted(true);
   };
 
   return (
@@ -67,49 +69,53 @@ export default function Survey() {
         surveyData.appearance.data.bgColor
       } ${surveyData.appearance.data.isGradient ? "gradient-class" : ""}`}
     >
-      <form onSubmit={handleSubmit}>
-        <h1>{surveyData.title}</h1>
-        <p>{surveyData.description}</p>
-        {surveyData.questions.map((question: Question, index: number) => {
-          switch (question.type) {
-            case "multipleChoice":
-              if (isMultipleChoiceQuestionData(question.data)) {
+      {isSubmitted ? (
+        <h1>Thank you for completing the survey!</h1>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <h1>{surveyData.title}</h1>
+          <p>{surveyData.description}</p>
+          {surveyData.questions.map((question: Question, index: number) => {
+            switch (question.type) {
+              case "multipleChoice":
+                if (isMultipleChoiceQuestionData(question.data)) {
+                  return (
+                    <SurveyMultipleChoiceQuestion
+                      key={index}
+                      question={question.data}
+                      onChoiceSelect={(choice: string) =>
+                        handleResponseChange(index, choice)
+                      }
+                    />
+                  );
+                }
+              case "starRating":
                 return (
-                  <SurveyMultipleChoiceQuestion
+                  <SurveyStarRatingQuestion
                     key={index}
                     question={question.data}
-                    onChoiceSelect={(choice: string) =>
-                      handleResponseChange(index, choice)
+                    onRatingSelect={(rating: number) =>
+                      handleResponseChange(index, rating)
                     }
                   />
                 );
-              }
-            case "starRating":
-              return (
-                <SurveyStarRatingQuestion
-                  key={index}
-                  question={question.data}
-                  onRatingSelect={(rating: number) =>
-                    handleResponseChange(index, rating)
-                  }
-                />
-              );
-            case "writeIn":
-              return (
-                <SurveyWriteInQuestion
-                  key={index}
-                  question={question.data}
-                  onTextChange={(text: string) =>
-                    handleResponseChange(index, text)
-                  }
-                />
-              );
-            default:
-              return null;
-          }
-        })}
-        <button type="submit">Submit</button>
-      </form>
+              case "writeIn":
+                return (
+                  <SurveyWriteInQuestion
+                    key={index}
+                    question={question.data}
+                    onTextChange={(text: string) =>
+                      handleResponseChange(index, text)
+                    }
+                  />
+                );
+              default:
+                return null;
+            }
+          })}
+          <button type="submit">Submit</button>
+        </form>
+      )}
     </div>
   );
 }

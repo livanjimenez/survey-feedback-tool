@@ -160,7 +160,11 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
       <button onClick={onBack} className="button mt-4">
         Back to Question Types
       </button>
-      <button onClick={handleFinish} className="button mt-4">
+      <button
+        onClick={handleFinish}
+        className="button mt-4"
+        disabled={questions.length === 0}
+      >
         Finish
       </button>
 
