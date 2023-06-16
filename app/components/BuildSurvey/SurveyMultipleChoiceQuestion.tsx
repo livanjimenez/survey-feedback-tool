@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import { QuestionData } from "../../types/SurveyFormTypes";
+import { useState } from "react";
+import { MultipleChoiceQuestionData } from "../../types/SurveyFormTypes";
 
 interface SurveyMultipleChoiceQuestionProps {
-  question: QuestionData;
+  question: MultipleChoiceQuestionData;
+  onChoiceSelect: (selectedChoice: string) => void;
 }
 
 const SurveyMultipleChoiceQuestion: React.FC<
   SurveyMultipleChoiceQuestionProps
-> = ({ question }) => {
+> = ({ question, onChoiceSelect }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
+    const choice = event.target.value;
+    setSelectedOption(choice);
+    onChoiceSelect(choice);
   };
 
   return (

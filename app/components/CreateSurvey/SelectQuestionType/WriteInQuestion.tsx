@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { QuestionProps, QuestionData } from "../../../types/SurveyFormTypes";
+import {
+  QuestionProps,
+  WriteInQuestionData,
+} from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseClient";
 
@@ -9,11 +12,11 @@ const WriteInQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<QuestionData>();
+  } = useForm<WriteInQuestionData>();
 
-  const [questions, setQuestions] = useState<QuestionData[]>([]);
+  const [questions, setQuestions] = useState<WriteInQuestionData[]>([]);
 
-  const handleFormSubmit = async (data: QuestionData) => {
+  const handleFormSubmit = async (data: WriteInQuestionData) => {
     try {
       // Create a new document in Firestore
       const questionId = Date.now().toString();
@@ -23,9 +26,12 @@ const WriteInQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
         question: data.question,
       });
 
-      setQuestions([...questions, data]);
+      // might need to still do this once
+      // I add functionality to include multiple questions in a survey
+      // setQuestions([...questions, data]);
 
-      onSubmit(questions);
+      // Directly add the new question to the existing questions before calling onSubmit
+      onSubmit([...questions, data]);
     } catch (error) {
       console.error("Error submitting question: ", error);
     }

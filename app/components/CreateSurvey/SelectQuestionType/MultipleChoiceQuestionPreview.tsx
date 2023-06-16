@@ -1,7 +1,7 @@
-import { QuestionData } from "../../../types/SurveyFormTypes";
+import { MultipleChoiceQuestionData } from "../../../types/SurveyFormTypes";
 
 interface QuestionPreviewProps {
-  data: QuestionData | null;
+  data: MultipleChoiceQuestionData | null;
 }
 
 const MultipleChoiceQuestionPreview: React.FC<QuestionPreviewProps> = ({

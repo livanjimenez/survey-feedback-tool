@@ -3,15 +3,18 @@ import { QuestionData } from "../../types/SurveyFormTypes";
 
 interface SurveyStarRatingQuestionProps {
   question: QuestionData;
+  onRatingSelect: (selectedRating: number) => void;
 }
 
 const SurveyStarRatingQuestion: React.FC<SurveyStarRatingQuestionProps> = ({
   question,
+  onRatingSelect,
 }) => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
+    onRatingSelect(rating);
   };
 
   return (

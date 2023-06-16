@@ -13,13 +13,26 @@ export interface BasicInfoProps {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export type QuestionType = "writeIn" | "multipleChoice" | "starRating";
-
-export interface QuestionData {
+export interface MultipleChoiceQuestionData {
   question: string;
   choices: ChoiceData[];
   answerType: "radio" | "checkbox";
 }
+
+export interface WriteInQuestionData {
+  question: string;
+}
+
+export interface StarRatingQuestionData {
+  question: string;
+}
+
+export type QuestionType = "writeIn" | "multipleChoice" | "starRating";
+
+export type QuestionData =
+  | MultipleChoiceQuestionData
+  | WriteInQuestionData
+  | StarRatingQuestionData;
 
 export interface QuestionProps {
   // question: QuestionData;
@@ -56,4 +69,10 @@ export interface SurveyData {
   description: string;
   questions: Question[];
   appearance: Appearance;
+}
+
+export function isMultipleChoiceQuestionData(
+  data: QuestionData
+): data is MultipleChoiceQuestionData {
+  return "choices" in data && "answerType" in data;
 }

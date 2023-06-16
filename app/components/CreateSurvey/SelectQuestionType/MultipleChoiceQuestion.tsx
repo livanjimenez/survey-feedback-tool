@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import {
   QuestionProps,
-  QuestionData,
+  MultipleChoiceQuestionData,
   ChoiceData,
 } from "../../../types/SurveyFormTypes";
 import { doc, setDoc } from "firebase/firestore";
@@ -20,7 +20,7 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
     formState: { errors },
     reset,
     watch,
-  } = useForm<QuestionData>({
+  } = useForm<MultipleChoiceQuestionData>({
     defaultValues: {
       question: "",
       choices: [{ text: "" }],
@@ -29,14 +29,14 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
   });
 
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<QuestionData[]>([]);
+  const [questions, setQuestions] = useState<MultipleChoiceQuestionData[]>([]);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "choices",
   });
 
-  const handleFormSubmit = async (data: QuestionData) => {
+  const handleFormSubmit = async (data: MultipleChoiceQuestionData) => {
     try {
       // Create a new document in Firestore
       const questionId = Date.now().toString();

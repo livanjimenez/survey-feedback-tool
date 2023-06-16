@@ -23,9 +23,9 @@ const StarRatingQuestion: React.FC<QuestionProps> = ({ onSubmit, onBack }) => {
         question: data.question,
       });
 
-      setQuestions([...questions, data]);
+      // setQuestions([...questions, data]);
 
-      onSubmit(questions);
+      onSubmit([...questions, data]);
       // onBack();
     } catch (error) {
       console.error("Error submitting question: ", error);
