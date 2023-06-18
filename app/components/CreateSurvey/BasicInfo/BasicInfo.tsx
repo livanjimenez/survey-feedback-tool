@@ -82,7 +82,7 @@ export function BasicInfo({
             <p className="error-message">{descriptionError}</p>
           )}
         </label>
-        <button type="submit" className="button ml-auto" disabled={loading}>
+        <button type="submit" className="button" disabled={loading}>
           {loading ? (
             <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-7 w-7"></div>
           ) : (

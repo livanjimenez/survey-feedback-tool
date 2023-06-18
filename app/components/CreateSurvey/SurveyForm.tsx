@@ -64,7 +64,7 @@ export default function SurveyForm() {
           onBack={() => setStep(step - 1)}
         />
       )}
-      {step === 0 && (
+      {step === 1 && (
         <PublishSurvey
           surveyData={{
             title,
