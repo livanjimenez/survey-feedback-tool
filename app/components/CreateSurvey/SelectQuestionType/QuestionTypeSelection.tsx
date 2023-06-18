@@ -28,14 +28,13 @@ export function QuestionTypeSelection({
   };
 
   const handleQuestionSubmit = (questions: QuestionData[]) => {
-    // If you only expect one question, you can simply take the first one
     const question = questions[0];
     onSelection(type as QuestionType, question);
-    setType(""); // reset type after question is added
+    setType("");
   };
 
   const handleBack = () => {
-    setType(""); // reset type when back button is clicked
+    setType("");
   };
 
   return (
@@ -44,7 +43,7 @@ export function QuestionTypeSelection({
         {type === "" ? (
           <form onSubmit={handleSubmit(handleTypeSelection)}>
             <label className="block">
-              <span className="text-gray-700">Question Type:</span>
+              <span className="text-gray-700">Question Type</span>
               <select
                 {...register("type", { required: true })}
                 className="input"
@@ -55,7 +54,9 @@ export function QuestionTypeSelection({
                 <option value="starRating">Star Rating</option>
               </select>
             </label>
-            {errors.type && <p>Please select a question type.</p>}
+            {errors.type && (
+              <p className="error-message">Please select a question type.</p>
+            )}
             <button type="submit" className="button">
               Next
             </button>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "../../../styles/surveyStyles.css";
 import "../../../styles/loading.css";
 import { BasicInfoProps } from "../../../types/SurveyFormTypes";
@@ -13,22 +14,29 @@ export function BasicInfo({
   loading,
   setLoading,
 }: BasicInfoProps) {
+  const [titleError, setTitleError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTitleError("");
+    setDescriptionError("");
 
-    // Input validation
+    if (!title) {
+      setTitleError("Title is required.");
+    }
+
+    if (!description) {
+      setDescriptionError("Description is required.");
+    }
+
     if (!title || !description) {
-      // replace with UI error message
-      alert("Both title and description are required.");
       return;
     }
 
     try {
-      // Create a new collection and document in Firestore
       const formId = Date.now().toString();
       const docRef = doc(db, "initialStep", formId);
-
-      // Set loading state
       setLoading(true);
 
       await setDoc(docRef, {
@@ -51,30 +59,34 @@ export function BasicInfo({
     >
       <div className="flex-1">
         <label className="block">
-          <span className="text-gray-700">Title:</span>
+          <span className="text-gray-700">Title</span>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="input"
-            placeholder="Set the title of your survey ..."
+            placeholder="Employee Insights"
           />
+          {titleError && <p className="error-message">{titleError}</p>}
         </label>
         <label className="block mt-4">
-          <span className="text-gray-700">Description:</span>
+          <span className="text-gray-700">Description</span>
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="input"
-            placeholder="Write a description ..."
+            placeholder="Build your custom survey"
           />
+          {descriptionError && (
+            <p className="error-message">{descriptionError}</p>
+          )}
         </label>
-        <button type="submit" className="button" disabled={loading}>
+        <button type="submit" className="button ml-auto" disabled={loading}>
           {loading ? (
             <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-7 w-7"></div>
           ) : (
-            "Next"
+            "Create"
           )}
         </button>
       </div>

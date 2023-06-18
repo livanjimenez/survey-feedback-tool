@@ -55,16 +55,16 @@ export default function SurveyForm() {
           setLoading={setLoading}
         />
       )}
-      {step === 1 && (
+      {step === 0 && (
         <QuestionTypeSelection onSelection={handleQuestionSelection} />
       )}
-      {step === 2 && (
+      {step === 0 && (
         <SurveyAppearance
           onNext={handleAppearanceSelection}
           onBack={() => setStep(step - 1)}
         />
       )}
-      {step === 3 && (
+      {step === 0 && (
         <PublishSurvey
           surveyData={{
             title,
