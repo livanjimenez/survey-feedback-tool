@@ -145,10 +145,6 @@ const MultipleChoiceQuestion: React.FC<QuestionProps> = ({
             </label>
           </div>
         </div>
-
-        {/* <button type="submit" className="button mt-4">
-          
-        </button> */}
         <button type="submit" className="button mt-4" disabled={loading}>
           {loading ? (
             <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-7 w-7"></div>

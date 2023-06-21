@@ -3,18 +3,11 @@ import { BasicInfo } from "./BasicInfo/BasicInfo";
 import { QuestionTypeSelection } from "./SelectQuestionType/QuestionTypeSelection";
 import { useState } from "react";
 import { QuestionData, QuestionType } from "../../types/SurveyFormTypes";
-import SurveyAppearance, {
-  AppearanceData,
-} from "./Appearance/SurveyAppearance";
 import PublishSurvey from "./Publish/PublishSurvey";
 
 interface Question {
   type: QuestionType;
   data: QuestionData;
-}
-
-interface Appearance {
-  data: AppearanceData;
 }
 
 export default function SurveyForm() {
@@ -23,7 +16,6 @@ export default function SurveyForm() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [appearance, setAppearance] = useState<Appearance | null>(null);
 
   const handleNext = () => {
     setStep(step + 1);
@@ -34,11 +26,6 @@ export default function SurveyForm() {
     question: QuestionData
   ) => {
     setQuestions([...questions, { type, data: question }]);
-    handleNext();
-  };
-
-  const handleAppearanceSelection = (data: AppearanceData) => {
-    setAppearance({ data });
     handleNext();
   };
 
@@ -55,22 +42,15 @@ export default function SurveyForm() {
           setLoading={setLoading}
         />
       )}
-      {step === 0 && (
+      {step === 1 && (
         <QuestionTypeSelection onSelection={handleQuestionSelection} />
       )}
-      {step === 0 && (
-        <SurveyAppearance
-          onNext={handleAppearanceSelection}
-          onBack={() => setStep(step - 1)}
-        />
-      )}
-      {step === 1 && (
+      {step === 2 && (
         <PublishSurvey
           surveyData={{
             title,
             description,
             questions,
-            appearance,
           }}
         />
       )}

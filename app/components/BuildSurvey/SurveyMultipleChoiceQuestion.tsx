@@ -18,17 +18,17 @@ const SurveyMultipleChoiceQuestion: React.FC<
   };
 
   return (
-    <div>
-      <h2>{question.question}</h2>
+    <div className="p-4">
       {question.choices.map((choice, index) => (
-        <div key={index}>
-          <label>
+        <div key={index} className="mb-4">
+          <label className="inline-flex items-center">
             <input
               type={question.answerType}
               name={`question-${question.question}`}
               value={choice.text}
               checked={selectedOption === choice.text}
               onChange={handleOptionChange}
+              className="mr-2"
             />
             {choice.text}
           </label>

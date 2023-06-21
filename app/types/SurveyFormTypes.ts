@@ -35,7 +35,6 @@ export type QuestionData =
   | StarRatingQuestionData;
 
 export interface QuestionProps {
-  // question: QuestionData;
   onSubmit: (data: QuestionData[]) => void;
   onBack: () => void;
 }
@@ -47,7 +46,6 @@ export interface ChoiceData {
 export interface AppearanceData {
   bgColor: string;
   fontColor: string;
-  isGradient: boolean;
 }
 
 export interface SurveyAppearanceProps {
@@ -68,7 +66,6 @@ export interface SurveyData {
   title: string;
   description: string;
   questions: Question[];
-  appearance: Appearance;
 }
 
 export function isMultipleChoiceQuestionData(
