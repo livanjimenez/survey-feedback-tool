@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { db } from "../../../firebase/firebaseClient";
+import { db, auth } from "../../../firebase/firebaseClient";
 import { addDoc, collection } from "firebase/firestore";
 import { Question } from "../../../types/SurveyFormTypes";
 
@@ -35,13 +35,22 @@ const PublishSurvey: React.FC<PublishSurveyProps> = ({ surveyData }) => {
   useEffect(() => {
     const saveSurveyToFirestore = async () => {
       const sanitizedSurveyData = sanitizeData(surveyData);
+      const userId = auth.currentUser?.uid;
+      console.log("Current User ID:", userId);
 
-      const docRef = await addDoc(
-        collection(db, "surveys"),
-        sanitizedSurveyData
-      );
-      const surveyId = docRef.id;
-      setLink(`${window.location.origin}/survey/${surveyId}`);
+      console.log("Sanitized Survey Data:", sanitizedSurveyData);
+
+      try {
+        const docRef = await addDoc(
+          // denormalize surveys into users & stand alone surveys collection
+          collection(db, `users/${userId}/surveys`),
+          sanitizedSurveyData
+        );
+        const surveyId = docRef.id;
+        setLink(`${window.location.origin}/survey/${surveyId}`);
+      } catch (error) {
+        console.error("Failed to save survey:", error);
+      }
     };
     saveSurveyToFirestore();
   }, []);
@@ -59,6 +68,7 @@ const PublishSurvey: React.FC<PublishSurveyProps> = ({ surveyData }) => {
             value={link}
             readOnly
             className="input flex-grow mr-2"
+            style={{ marginTop: "20px" }}
           />
           <button onClick={copyToClipboard} className="button">
             <DocumentDuplicateIcon className="h-5 w-5" aria-hidden="true" />

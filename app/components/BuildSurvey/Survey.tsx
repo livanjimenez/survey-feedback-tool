@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { db } from "../../firebase/firebaseClient";
+import { db, auth } from "../../firebase/firebaseClient";
 import { doc, getDoc, collection, addDoc } from "firebase/firestore";
 import { SurveyMultipleChoiceQuestion } from "./SurveyMultipleChoiceQuestion";
 import { SurveyStarRatingQuestion } from "./SurveyStarRatingQuestion";
@@ -20,6 +20,7 @@ export default function Survey() {
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
   const [responses, setResponses] = useState<Record<number, any>>({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState<Date | null>(null);
 
   const handleResponseChange = (questionIndex: number, response: any) => {
     setResponses((prevResponses) => ({
@@ -31,35 +32,48 @@ export default function Survey() {
   useEffect(() => {
     if (!id) return; // if id is not yet available, don't fetch data
 
-    const fetchData = async () => {
-      const docRef = doc(db, "surveys", id as string);
-      const docSnap = await getDoc(docRef);
+    setStartTime(new Date());
 
-      if (docSnap.exists()) {
-        const data = docSnap.data() as SurveyData;
-        console.log(JSON.stringify(data, null, 2));
-        setSurveyData(docSnap.data() as SurveyData);
+    const fetchData = async () => {
+      const userId = auth.currentUser?.uid;
+
+      if (userId) {
+        const docRef = doc(db, `users/${userId}/surveys`, id as string);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data() as SurveyData;
+          console.log(JSON.stringify(data, null, 2));
+          setSurveyData(docSnap.data() as SurveyData);
+        } else {
+          console.log("No such document!");
+        }
       } else {
-        console.log("No such document!");
+        console.error("No user is signed in.");
       }
     };
 
     fetchData();
   }, [id]);
 
-  if (!surveyData) return "Loading..."; //replace with a proper loading indicator
+  if (!surveyData) return "Loading...";
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Create a new document in a responses collection in Firestore
-    // with user's responses and a reference to the survey
+    const endTime = new Date(); // Capture end time
+    const referrer = document.referrer; // Capture the referrer URL
+
     const docRef = await addDoc(collection(db, "responses"), {
       surveyId: id,
       responses: responses,
+      userId: auth.currentUser?.uid,
+      startTime: startTime,
+      endTime: endTime,
+      referrer: referrer,
     });
 
-    console.log("Document written with ID: ", docRef.id);
+    console.log("Response document written with ID: ", docRef.id);
     setIsSubmitted(true);
   };
 
