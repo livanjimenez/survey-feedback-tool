@@ -1,11 +1,12 @@
 "use client";
 
 import Dashboard from "../components/Dashboard/Dashboard";
+import DashboardNavbar from "../components/Navbar/DashBoardNavbar";
 
 export default function DashboardPage() {
   return (
     <>
-      <h1>Welcome to SRVY</h1>
+      <DashboardNavbar />
       <Dashboard />
     </>
   );

@@ -7,6 +7,7 @@ import { User } from "firebase/auth";
 
 const Login: FC = () => {
   const { signIn, signUp, signInWithGoogle } = useContext(AuthContext);
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isNewUser, setIsNewUser] = useState(false);
@@ -45,7 +46,7 @@ const Login: FC = () => {
   const handleUser = async (user: User) => {
     await setDoc(doc(db, "users", user.uid), {
       uid: user.uid,
-      name: user.displayName,
+      name: user.displayName || displayName,
       email: user.email,
       provider: user.providerData[0].providerId,
     });
@@ -59,6 +60,16 @@ const Login: FC = () => {
           <h1 className="text-2xl font-semibold">
             {isNewUser ? "Create your account" : "Log in"}
           </h1>
+          {isNewUser && (
+            <input
+              type="name"
+              placeholder="Display Name"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          )}
           <input
             type="email"
             placeholder="Email"
