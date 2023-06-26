@@ -49,7 +49,7 @@ const Login: FC = () => {
       email: user.email,
       provider: user.providerData[0].providerId,
     });
-    router.push("/survey");
+    router.push("/dashboard");
   };
 
   return (

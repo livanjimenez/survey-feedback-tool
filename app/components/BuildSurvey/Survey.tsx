@@ -30,26 +30,20 @@ export default function Survey() {
   };
 
   useEffect(() => {
-    if (!id) return; // if id is not yet available, don't fetch data
+    if (!id) return;
 
     setStartTime(new Date());
 
     const fetchData = async () => {
-      const userId = auth.currentUser?.uid;
+      const docRef = doc(db, `surveys`, id as string);
+      const docSnap = await getDoc(docRef);
 
-      if (userId) {
-        const docRef = doc(db, `users/${userId}/surveys`, id as string);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data() as SurveyData;
-          console.log(JSON.stringify(data, null, 2));
-          setSurveyData(docSnap.data() as SurveyData);
-        } else {
-          console.log("No such document!");
-        }
+      if (docSnap.exists()) {
+        const data = docSnap.data() as SurveyData;
+        console.log(JSON.stringify(data, null, 2));
+        setSurveyData(data);
       } else {
-        console.error("No user is signed in.");
+        console.log("No such document!");
       }
     };
 

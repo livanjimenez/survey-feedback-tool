@@ -40,18 +40,31 @@ const PublishSurvey: React.FC<PublishSurveyProps> = ({ surveyData }) => {
 
       console.log("Sanitized Survey Data:", sanitizedSurveyData);
 
+      // Add userId to the survey data
+      sanitizedSurveyData.userId = userId;
+
       try {
-        const docRef = await addDoc(
-          // denormalize surveys into users & stand alone surveys collection
+        // Save survey to the user's collection
+        const userDocRef = await addDoc(
           collection(db, `users/${userId}/surveys`),
           sanitizedSurveyData
         );
-        const surveyId = docRef.id;
+
+        // Save survey to the general surveys collection
+        const generalDocRef = await addDoc(
+          collection(db, "surveys"),
+          sanitizedSurveyData
+        );
+
+        // Here we're assuming the surveyId should be the same in both collections
+        // So we're using the id from the first document reference
+        const surveyId = generalDocRef.id;
         setLink(`${window.location.origin}/survey/${surveyId}`);
       } catch (error) {
         console.error("Failed to save survey:", error);
       }
     };
+
     saveSurveyToFirestore();
   }, []);
 
