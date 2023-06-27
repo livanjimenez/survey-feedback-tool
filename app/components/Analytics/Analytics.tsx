@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState, useContext } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase/firebaseClient";
 import { Bar } from "react-chartjs-2";
+import { AuthContext } from "@/app/context/AuthContext";
 import "chart.js/auto"; // Import all of Chart.js
 
 interface ProcessedData {
@@ -20,19 +21,38 @@ interface ChartData {
 
 const Analytics = () => {
   const [data, setData] = useState<ChartData | null>(null);
+  // use the AuthContext to get the current user
+  const { user } = useContext(AuthContext);
 
   const processData = (responseData: any[]): ProcessedData => {
     let processedData: ProcessedData = {};
 
     // Loop through all the responses
     responseData.forEach((response) => {
-      // If this surveyId has been seen before, increment the count
-      if (processedData[response.surveyId]) {
-        processedData[response.surveyId]++;
+      const surveyId = response.surveyId;
+
+      // Check if response.responses is an object
+      if (response.responses && typeof response.responses === "object") {
+        // Loop through the keys in the responses object and process the data
+        Object.keys(response.responses).forEach((key) => {
+          const answer = response.responses[key];
+          // Your aggregation logic here
+          // For now, you can simply log the answer to see what data you have
+          console.log("answer:", answer);
+        });
+      } else {
+        // Log the issue to see what response.responses contains
+        console.error(
+          "Expected responses to be an object, but got:",
+          response.responses
+        );
       }
-      // If this is a new surveyId, initialize the count to 1
-      else {
-        processedData[response.surveyId] = 1;
+
+      // Increment the count for this surveyId
+      if (processedData[surveyId]) {
+        processedData[surveyId]++;
+      } else {
+        processedData[surveyId] = 1;
       }
     });
 
@@ -41,8 +61,15 @@ const Analytics = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const responseCollection = collection(db, "responses");
-      const responseSnapshot = await getDocs(responseCollection);
+      if (!user) return; // exit if there is no user logged in
+
+      // Query to get responses for surveys created by the logged-in user
+      const responseQuery = query(
+        collection(db, "responses"),
+        where("userId", "==", user.uid)
+      );
+
+      const responseSnapshot = await getDocs(responseQuery);
       const responseData = responseSnapshot.docs.map((doc) => doc.data());
 
       // Process your data here to calculate statistics and prepare it for the chart
@@ -68,7 +95,7 @@ const Analytics = () => {
     };
 
     fetchData();
-  }, []);
+  }, [user]); // dependency array includes the user
 
   return (
     <div>

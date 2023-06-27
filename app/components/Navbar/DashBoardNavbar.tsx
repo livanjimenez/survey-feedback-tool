@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, Menu } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
@@ -10,13 +10,15 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import { AuthContext } from "../../context/AuthContext";
+import { useRouter } from "next/navigation";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function DashboardNavbar() {
-  const { user } = useContext(AuthContext);
+  const { user, signOut } = useContext(AuthContext);
+  const router = useRouter();
 
   const navigation = [
     {
@@ -36,6 +38,7 @@ export default function DashboardNavbar() {
       href: "#",
       icon: FireIcon,
       current: false,
+      disabled: true,
     },
   ];
 
@@ -43,6 +46,11 @@ export default function DashboardNavbar() {
     { name: "Settings", href: "#", icon: Cog6ToothIcon },
     { name: "Support", href: "#", icon: QuestionMarkCircleIcon },
   ];
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -64,31 +72,14 @@ export default function DashboardNavbar() {
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      // <a
-                      //   key={item.name}
-                      //   href={item.href}
-                      //   className={classNames(
-                      //     item.current
-                      //       ? "bg-gray-900 text-white"
-                      //       : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      //     "px-3 py-2 rounded-md text-sm font-medium flex items-center"
-                      //   )}
-                      //   aria-current={item.current ? "page" : undefined}
-                      // >
-                      //   <item.icon
-                      //     className="h-6 w-6 mr-2"
-                      //     aria-hidden="true"
-                      //   />
-                      //   {item.name}
-                      // </a>
-
                       <a
                         key={item.name}
+                        href={item.disabled ? undefined : item.href}
                         className={classNames(
-                          item.name === "Templates, Coming Soon!"
-                            ? "cursor-not-allowed text-gray-500"
-                            : item.current
+                          item.current
                             ? "bg-gray-900 text-white"
+                            : item.disabled
+                            ? "text-gray-400 cursor-not-allowed"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "px-3 py-2 rounded-md text-sm font-medium flex items-center"
                         )}
@@ -122,9 +113,25 @@ export default function DashboardNavbar() {
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center text-sm text-gray-300 ml-4">
-                  Hi, {user?.displayName || "null"}{" "}
-                </div>
+                <Menu>
+                  <Menu.Button className="flex items-center text-sm text-gray-300 ml-4">
+                    Hi, {user?.displayName || "null"}{" "}
+                  </Menu.Button>
+                  <Menu.Items>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          className={`${
+                            active && "bg-blue-500"
+                          } block px-4 py-2 text-sm text-gray-700`}
+                          onClick={handleSignOut}
+                        >
+                          Sign Out
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
               </div>
             </div>
           </div>

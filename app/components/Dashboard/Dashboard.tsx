@@ -1,59 +1,57 @@
-"use client";
 import { useEffect, useState } from "react";
-import { db, auth } from "../../firebase/firebaseClient";
-import { collection, getDocs } from "firebase/firestore";
-import Link from "next/link";
+import { auth, db } from "../../firebase/firebaseClient";
 import { useRouter } from "next/navigation";
+import { collection, getDocs, where, query } from "firebase/firestore";
 import SurveyForm from "../CreateSurvey/SurveyForm";
+import SurveyList from "./SurveyList";
 
 interface Survey {
   id: string;
   title: string;
+  description: string;
 }
 
-const Dashboard: React.FC = () => {
-  const [surveys, setSurveys] = useState<Survey[]>([]);
+export default function Dashboard() {
   const router = useRouter();
+  const [surveys, setSurveys] = useState<Survey[]>([]);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) {
-        fetchSurveys();
-      } else {
+      if (!user) {
         router.push("/login");
+      } else {
+        fetchPublicSurveyId();
       }
     });
   }, []);
 
-  const fetchSurveys = async () => {
+  const fetchPublicSurveyId = async () => {
     const userId = auth.currentUser?.uid;
 
     if (userId) {
-      const querySnapshot = await getDocs(
-        collection(db, `users/${userId}/surveys`)
+      // Query the surveys collection for surveys where userId matches the authenticated user's UID
+      const surveyQuery = query(
+        collection(db, "surveys"),
+        where("userId", "==", userId)
       );
+      const querySnapshot = await getDocs(surveyQuery);
+
       const surveysData = querySnapshot.docs.map((doc) => {
-        return { id: doc.id, title: doc.data().title };
+        return {
+          id: doc.id,
+          title: doc.data().title,
+          description: doc.data().description,
+        };
       });
+
       setSurveys(surveysData);
-    } else {
-      console.error("No user is signed in.");
     }
   };
 
   return (
     <div>
       <SurveyForm />
-
-      {surveys.map((survey) => (
-        <div key={survey.id}>
-          <h2>{survey.title}</h2>
-          <h6>survey ID: {survey.id}</h6>
-          <Link href={`/survey/${survey.id}`}>Take Survey</Link>
-        </div>
-      ))}
+      <SurveyList surveys={surveys} />
     </div>
   );
-};
-
-export default Dashboard;
+}
