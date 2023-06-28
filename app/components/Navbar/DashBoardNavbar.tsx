@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Disclosure, Menu } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -11,6 +11,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
+import { db } from "@/app/firebase/firebaseClient";
+import { doc, getDoc } from "firebase/firestore";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -18,7 +20,21 @@ function classNames(...classes: string[]) {
 
 export default function DashboardNavbar() {
   const { user, signOut } = useContext(AuthContext);
+  const [displayName, setDisplayName] = useState(null);
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      const fetchUserDisplayName = async () => {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          setDisplayName(userDoc.data().name);
+        }
+      };
+
+      fetchUserDisplayName();
+    }
+  }, [user]);
 
   const navigation = [
     {
@@ -50,6 +66,10 @@ export default function DashboardNavbar() {
   const handleSignOut = async () => {
     await signOut();
     router.push("/");
+  };
+
+  const handleCreateSurvey = async () => {
+    router.push("/create");
   };
 
   return (
@@ -97,7 +117,15 @@ export default function DashboardNavbar() {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div className="hidden sm:block sm:ml-6">
-                  <div className="flex space-x-4">
+                  <div className="flex space-x-4 items-center">
+                    <div className="mr-4">
+                      <button
+                        className="rounded-md inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={handleCreateSurvey}
+                      >
+                        Create Survey
+                      </button>
+                    </div>
                     {userNavigation.map((item) => (
                       <a
                         key={item.name}
@@ -113,9 +141,10 @@ export default function DashboardNavbar() {
                     ))}
                   </div>
                 </div>
+
                 <Menu>
                   <Menu.Button className="flex items-center text-sm text-gray-300 ml-4">
-                    Hi, {user?.displayName || "null"}{" "}
+                    Hi, {displayName || "Null"}
                   </Menu.Button>
                   <Menu.Items>
                     <Menu.Item>
