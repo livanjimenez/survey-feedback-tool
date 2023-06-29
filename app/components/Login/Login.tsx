@@ -1,18 +1,48 @@
-import React, { FC, useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { doc, setDoc } from "firebase/firestore";
+import { User, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { db } from "../../firebase/firebaseClient";
-import { User } from "firebase/auth";
+import { useFirestore } from "@/app/hooks/useFirestore";
+import { auth, db } from "../../firebase/firebaseClient";
+import { getDoc, doc } from "firebase/firestore";
 
-const Login: FC = () => {
-  const { signIn, signUp, signInWithGoogle } = useContext(AuthContext);
+const Login = () => {
+  const { signIn, signUp, signInWithGoogle, signOut } = useContext(AuthContext);
+  const { addDocument } = useFirestore("users");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isNewUser, setIsNewUser] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const docSnapshot = await getDoc(doc(db, "users", user.uid));
+          if (docSnapshot.exists()) {
+            router.push("/dashboard");
+          } else {
+            // If the user doc doesn't exist, log out the user
+            await signOut();
+            setError(
+              "Unexpected error: User data not found. Please log in again."
+            );
+          }
+        } catch (error) {
+          // If an error occurs, log out the user and show an error message
+          await signOut();
+          if (error instanceof Error) {
+            setError(`Unexpected error: ${error.message}. Please try again.`);
+          }
+        }
+      }
+    });
+
+    // Clean up the subscription on unmount
+    return () => unsubscribe();
+  }, [router, signOut]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +74,7 @@ const Login: FC = () => {
   };
 
   const handleUser = async (user: User) => {
-    await setDoc(doc(db, "users", user.uid), {
+    await addDocument({
       uid: user.uid,
       name: user.displayName || displayName,
       email: user.email,

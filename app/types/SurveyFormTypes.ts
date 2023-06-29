@@ -73,3 +73,9 @@ export function isMultipleChoiceQuestionData(
 ): data is MultipleChoiceQuestionData {
   return "choices" in data && "answerType" in data;
 }
+
+export interface Survey {
+  id: string;
+  title: string;
+  description: string;
+}

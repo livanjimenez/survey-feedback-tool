@@ -10,6 +10,8 @@ import {
   UserCredential,
   GoogleAuthProvider,
   signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 
 interface AuthContextProps {
@@ -54,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string
   ): Promise<UserCredential> => {
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -68,6 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signInWithGoogle = async (): Promise<UserCredential> => {
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const userCredential = await signInWithPopup(auth, googleProvider);
       return userCredential;
     } catch (error) {
