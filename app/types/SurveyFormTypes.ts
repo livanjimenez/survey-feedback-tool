@@ -62,6 +62,12 @@ export interface Appearance {
   data: AppearanceData;
 }
 
+export interface Survey {
+  id: string;
+  title: string;
+  description: string;
+}
+
 export interface SurveyData {
   title: string;
   description: string;
@@ -74,8 +80,14 @@ export function isMultipleChoiceQuestionData(
   return "choices" in data && "answerType" in data;
 }
 
-export interface Survey {
-  id: string;
-  title: string;
-  description: string;
+export function isStarRatingQuestionData(
+  data: QuestionData
+): data is StarRatingQuestionData {
+  return "question" in data && !("choices" in data) && !("answerType" in data);
+}
+
+export function isWriteInQuestionData(
+  data: QuestionData
+): data is WriteInQuestionData {
+  return "question" in data && !("choices" in data) && !("answerType" in data);
 }

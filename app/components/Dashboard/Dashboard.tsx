@@ -92,6 +92,7 @@ export default function Dashboard() {
         Create Survey
       </button>
 
+      {/**  divider */}
       <div className="border-t my-4 border-gray-300"></div>
 
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   ArrowUpOnSquareIcon,
   TrashIcon,
   DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline';
-import { Disclosure } from '@headlessui/react';
-import { Survey } from '@/app/types/SurveyFormTypes';
+} from "@heroicons/react/24/outline";
+import { Disclosure } from "@headlessui/react";
+import { Survey } from "@/app/types/SurveyFormTypes";
 
 interface SurveyListProps {
   surveys: Survey[];
@@ -47,7 +47,7 @@ export default function SurveyList({ surveys, onDelete }: SurveyListProps) {
                       </Disclosure.Button>
                       <Disclosure.Panel
                         className={`mt-2 z-10 w-full bg-gray-50 rounded-b-lg ${
-                          open ? 'block' : 'hidden'
+                          open ? "block" : "hidden"
                         }`}
                       >
                         <div className="flex items-center space-x-4 p-4">
@@ -60,7 +60,7 @@ export default function SurveyList({ surveys, onDelete }: SurveyListProps) {
                             className="h-5 w-5 text-gray-500 hover:text-gray-900 cursor-pointer"
                             onClick={() =>
                               handleCopy(
-                                `${window.location.origin}/survey/${survey.id}`,
+                                `${window.location.origin}/survey/${survey.id}`
                               )
                             }
                           />
@@ -83,8 +83,8 @@ export default function SurveyList({ surveys, onDelete }: SurveyListProps) {
                         <TrashIcon
                           className={`h-5 w-5 cursor-pointer ml-4 ${
                             open
-                              ? 'text-red-500'
-                              : 'text-gray-500 hover:text-red-500'
+                              ? "text-red-500"
+                              : "text-gray-500 hover:text-red-500"
                           }`}
                         />
                         <span className="absolute left-0 mt-2 text-xs text-white bg-black opacity-0 group-hover:opacity-100 transition p-1 rounded">
@@ -93,7 +93,7 @@ export default function SurveyList({ surveys, onDelete }: SurveyListProps) {
                       </Disclosure.Button>
                       <Disclosure.Panel
                         className={`mt-2 z-10 w-full bg-red-50 rounded-b-lg ${
-                          open ? 'block' : 'hidden'
+                          open ? "block" : "hidden"
                         }`}
                       >
                         <div className="flex items-center space-x-4 p-4">
