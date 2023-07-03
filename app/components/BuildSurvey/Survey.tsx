@@ -16,7 +16,7 @@ import {
 
 export default function Survey() {
   const pathname = usePathname();
-  const id = pathname.split("/")[2]; // Assuming the structure is /app/survey/{id}/page
+  const id = pathname.split("/")[2];
   const [surveyData, setSurveyData] = useState<SurveyData | null>(null);
   const [responses, setResponses] = useState<Record<number, any>>({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);

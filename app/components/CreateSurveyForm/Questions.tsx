@@ -64,7 +64,7 @@ const StarRatingQuestion: React.FC<StarRatingQuestionData> = ({ question }) => {
   );
 };
 
-const Question: React.FC<QuestionProps> = ({ data }) => {
+const Questions: React.FC<QuestionProps> = ({ data }) => {
   if (isMultipleChoiceQuestionData(data)) {
     return <MultipleChoiceQuestion {...data} />;
   } else if (isStarRatingQuestionData(data)) {
@@ -76,4 +76,4 @@ const Question: React.FC<QuestionProps> = ({ data }) => {
   }
 };
 
-export default Question;
+export default Questions;
