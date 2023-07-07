@@ -15,7 +15,7 @@ interface SurveyData {
 }
 
 export default function CreateSurvey() {
-  const [surveyLink, setSurveyLink] = useState(""); // use state to store the survey link
+  const [surveyLink, setSurveyLink] = useState("");
 
   const userFirestore = useFirestore(`users/${auth.currentUser?.uid}/surveys`);
   const generalFirestore = useFirestore("surveys");
@@ -25,9 +25,9 @@ export default function CreateSurvey() {
       data,
       userFirestore.addDocument,
       generalFirestore.addDocument
-    ); // pass the addDocument functions
+    );
     if (link) {
-      setSurveyLink(link); // store the link
+      setSurveyLink(link);
     }
   };
 

@@ -10,46 +10,17 @@ const SurveyForm: React.FC<{ onSubmit: (data: any) => void }> = ({
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [newQuestionType, setNewQuestionType] = useState("");
   const [newQuestionText, setNewQuestionText] = useState("");
-  const [newQuestionChoices, setNewQuestionChoices] = useState(""); // for MultipleChoiceQuestionData
+  const [newQuestionChoicesArray, setNewQuestionChoicesArray] = useState<
+    string[]
+  >([]);
 
-  // const handleAddQuestion = () => {
-  //   if (newQuestionType && newQuestionText) {
-  //     let newQuestion: QuestionType;
-  //     switch (newQuestionType) {
-  //       case "writeIn":
-  //         newQuestion = {
-  //           __typename: "WriteInQuestionData",
-  //           question: newQuestionText,
-  //         };
-  //         break;
-  //       case "multipleChoice":
-  //         newQuestion = {
-  //           __typename: "MultipleChoiceQuestionData",
-  //           question: newQuestionText,
-  //           choices: newQuestionChoices
-  //             .split(",")
-  //             .map((choice) => ({ text: choice.trim() })),
-  //         };
-  //         break;
-  //       case "starRating":
-  //         newQuestion = {
-  //           __typename: "StarRatingQuestionData",
-  //           question: newQuestionText,
-  //         };
-  //         break;
-  //       default:
-  //         return;
-  //     }
-  //     setQuestions([...questions, newQuestion]);
-  //     console.log("Question added: ", newQuestion); // Debug log
-  //     console.log("Current questions: ", [...questions, newQuestion]); // Debug log
-  //     setNewQuestionType("");
-  //     setNewQuestionText("");
-  //     setNewQuestionChoices("");
-  //   }
-  // };
+  const handleAddChoice = (choice: string) => {
+    if (newQuestionChoicesArray.length < 4) {
+      setNewQuestionChoicesArray([...newQuestionChoicesArray, choice]);
+    }
+  };
 
-  const handleAddQuestion = () => {
+  const handleAddQuestion = (answerType: string) => {
     if (newQuestionType && newQuestionText) {
       let newQuestion: QuestionType;
       switch (newQuestionType) {
@@ -65,11 +36,11 @@ const SurveyForm: React.FC<{ onSubmit: (data: any) => void }> = ({
         case "multipleChoice":
           newQuestion = {
             data: {
-              answerType: "radio", // or "checkbox" depending on your requirement
+              answerType: answerType,
               question: newQuestionText,
-              choices: newQuestionChoices
-                .split(",")
-                .map((choice) => ({ text: choice.trim() })),
+              choices: newQuestionChoicesArray.map((choice) => ({
+                text: choice,
+              })),
             },
             type: "multipleChoice",
           };
@@ -89,7 +60,7 @@ const SurveyForm: React.FC<{ onSubmit: (data: any) => void }> = ({
       setQuestions([...questions, newQuestion]);
       setNewQuestionType("");
       setNewQuestionText("");
-      setNewQuestionChoices("");
+      setNewQuestionChoicesArray([]);
     }
   };
 
@@ -100,7 +71,6 @@ const SurveyForm: React.FC<{ onSubmit: (data: any) => void }> = ({
       description,
       questions,
     };
-    console.log("Submitting data: ", data); // Debug log
     onSubmit(data);
   };
 
@@ -115,8 +85,8 @@ const SurveyForm: React.FC<{ onSubmit: (data: any) => void }> = ({
       setNewQuestionType={setNewQuestionType}
       newQuestionText={newQuestionText}
       setNewQuestionText={setNewQuestionText}
-      newQuestionChoices={newQuestionChoices}
-      setNewQuestionChoices={setNewQuestionChoices}
+      newQuestionChoicesArray={newQuestionChoicesArray}
+      handleAddChoice={handleAddChoice}
       handleAddQuestion={handleAddQuestion}
       handleSubmit={handleSubmit}
     />

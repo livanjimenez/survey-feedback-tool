@@ -1,0 +1,59 @@
+.formContainer {
+  @apply container mx-auto flex flex-col space-y-4 m-8;
+}
+
+.title {
+  @apply text-2xl font-semibold;
+}
+
+.description {
+  @apply text-xl;
+}
+
+.inputWrapper {
+  @apply flex justify-center items-center space-x-4;
+}
+
+.editIcon {
+  @apply h-5 w-5 cursor-pointer text-gray-500 hidden;
+}
+
+.editInput {
+  @apply bg-transparent border-none outline-none focus:ring-0 focus:border-none;
+}
+
+.inputWrapper:hover .editIcon {
+  @apply block;
+}
+
+.textInput {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500;
+}
+
+.textXL {
+  @apply text-xl font-bold mb-2;
+}
+
+.flexCenter {
+  @apply flex justify-center items-center space-x-2;
+}
+
+.textGray {
+  @apply text-gray-400;
+}
+
+.selectLabel {
+  @apply w-1/4 block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400;
+}
+
+.selectDropdown {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+}
+
+.inputField {
+  @apply w-1/4 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-0;
+}
+
+.btnWrapper {
+  @apply mt-4 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}

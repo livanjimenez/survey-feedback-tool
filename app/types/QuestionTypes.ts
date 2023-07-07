@@ -8,7 +8,7 @@ type WriteInQuestionType = {
 
 type MultipleChoiceQuestionType = {
   data: {
-    answerType: "radio" | "checkbox";
+    answerType: string;
     question: string;
     choices: { text: string }[];
   };

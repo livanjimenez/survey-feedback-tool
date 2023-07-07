@@ -1,78 +1,60 @@
-import React, { useState } from "react";
-import {
-  QuestionData,
-  MultipleChoiceQuestionData,
-  WriteInQuestionData,
-  StarRatingQuestionData,
-  isMultipleChoiceQuestionData,
-  isStarRatingQuestionData,
-  isWriteInQuestionData,
-} from "@/app/types/SurveyFormTypes";
+import React from "react";
+
+import { QuestionType } from "@/app/types/QuestionTypes";
 
 interface QuestionProps {
-  data: QuestionData;
+  data: QuestionType;
 }
 
-const WriteInQuestion: React.FC<WriteInQuestionData> = ({ question }) => {
-  return (
-    <div>
-      <p>{question}</p>
-      <input type="text" placeholder="Your answer here" />
-    </div>
-  );
-};
-
-const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionData> = ({
-  question,
-  choices,
-}) => {
-  return (
-    <div>
-      <p>{question}</p>
-      {choices.map((choice, index) => (
-        <div key={index}>
-          <input
-            type="radio"
-            id={choice.text}
-            name={question}
-            value={choice.text}
-          />
-          <label htmlFor={choice.text}>{choice.text}</label>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const StarRatingQuestion: React.FC<StarRatingQuestionData> = ({ question }) => {
-  const [rating, setRating] = useState<number>(0);
-  const starRating = [1, 2, 3, 4, 5];
-
-  return (
-    <div>
-      <p>{question}</p>
-      {starRating.map((star, index) => (
-        <button
-          key={index}
-          onClick={() => setRating(star)}
-          style={{ color: star <= rating ? "gold" : "gray" }}
-        >
-          ☆
-        </button>
-      ))}
-    </div>
-  );
-};
-
 const Questions: React.FC<QuestionProps> = ({ data }) => {
-  if (isMultipleChoiceQuestionData(data)) {
-    return <MultipleChoiceQuestion {...data} />;
-  } else if (isStarRatingQuestionData(data)) {
-    return <StarRatingQuestion {...data} />;
-  } else if (isWriteInQuestionData(data)) {
-    return <WriteInQuestion {...(data as WriteInQuestionData)} />;
-  } else {
-    return null;
+  switch (data.type) {
+    case "multipleChoice":
+      return (
+        <div>
+          <h2 className="text-xl font-bold mb-2">{data.data.question}</h2>
+          {data.data.choices.map((choice, index) => (
+            <label key={index} className="block">
+              <input
+                type={data.data.answerType}
+                name={data.data.question}
+                value={choice.text}
+                className="mr-2"
+              />
+              {choice.text}
+            </label>
+          ))}
+        </div>
+      );
+
+    case "writeIn":
+      return (
+        <div>
+          <h2 className="text-xl font-bold mb-2">{data.data.question}</h2>
+          <textarea
+            placeholder="Your answer here..."
+            className="input w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            rows={3}
+            readOnly
+          />
+        </div>
+      );
+
+    case "starRating":
+      return (
+        <div>
+          <h2 className="text-xl font-bold mb-3">{data.data.question}</h2>
+          <div className="flex justify-center items-center space-x-2">
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <button key={rating} type="button" className="text-gray-400">
+                ☆<span>{rating}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+
+    default:
+      return null;
   }
 };
 
