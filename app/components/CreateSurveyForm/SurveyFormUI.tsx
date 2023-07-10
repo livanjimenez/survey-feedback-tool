@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Questions from "./Questions";
 import { QuestionType } from "@/app/types/QuestionTypes";
 import "@/app/styles/formStyles.css";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useDrop } from "react-dnd";
+import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 
 const SurveyFormUI: React.FC<{
   title: string;
@@ -36,8 +38,14 @@ const SurveyFormUI: React.FC<{
   const [newChoice, setNewChoice] = useState("");
   const [isTitleEditing, setIsTitleEditing] = useState(false);
   const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
+
+  const [, drop] = useDrop(() => ({
+    accept: "question",
+    drop: () => ({ name: "SurveyFormUI" }),
+  }));
+
   return (
-    <form onSubmit={handleSubmit} className="formContainer">
+    <form ref={drop} onSubmit={handleSubmit} className="formContainer">
       <div className="inputWrapper">
         {isTitleEditing ? (
           <input
@@ -82,41 +90,94 @@ const SurveyFormUI: React.FC<{
           onClick={() => setIsDescriptionEditing(true)}
         />
       </div>
+
+      <DroppableArea
+        handleAddQuestion={handleAddQuestion}
+        newQuestionText={newQuestionText}
+        setNewQuestionText={setNewQuestionText}
+        newQuestionType={newQuestionType}
+      />
+
       {questions.map((question, index) => (
         <Questions key={index} data={question} />
       ))}
-      <label className="selectLabel">
-        Select an option
-        <select
-          value={newQuestionType}
-          onChange={(e) => setNewQuestionType(e.target.value)}
-          className="selectDropdown"
-        >
-          <option value="">Choose a type of question</option>
-          <option value="writeIn">Write In</option>
-          <option value="multipleChoice">Multiple Choice</option>
-          <option value="starRating">Star Rating</option>
-        </select>
-      </label>
 
+      <div className="border-t my-4 border-gray-300" />
       <div className="container">
-        <input
-          type="text"
-          value={newQuestionText}
-          onChange={(e) => setNewQuestionText(e.target.value)}
-          placeholder="Question"
-          className="inputField mr-2"
-        />
-        <button
-          className="btnWrapper my-4"
-          type="button"
-          onClick={() => handleAddQuestion(newQuestionType)}
-        >
-          Add Question
+        <button type="submit" className="btnWrapper">
+          Publish Survey
         </button>
       </div>
+    </form>
+  );
+};
 
-      {newQuestionType === "multipleChoice" && (
+export default SurveyFormUI;
+
+interface DraggableItem {
+  type: string;
+  questionType: string;
+}
+
+interface DroppableAreaProps {
+  handleAddQuestion: (questionType: string) => void;
+  newQuestionText: string;
+  setNewQuestionText: React.Dispatch<React.SetStateAction<string>>;
+  newQuestionType: string;
+}
+
+const DroppableArea: React.FC<DroppableAreaProps> = ({
+  handleAddQuestion,
+  newQuestionText,
+  setNewQuestionText,
+  newQuestionType,
+}) => {
+  const [droppedItems, setDroppedItems] = useState<Array<DraggableItem>>([]);
+
+  const [{ canDrop, isOver }, drop] = useDrop({
+    accept: "question",
+    drop: (item: DraggableItem, monitor) => {
+      handleAddQuestion(item.questionType);
+      setDroppedItems((items) => [...items, item]);
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
+
+  let backgroundColor = "white";
+  if (canDrop) backgroundColor = "#f7f7f7";
+  if (isOver) backgroundColor = "#eaeaea";
+
+  return (
+    <div ref={drop} style={{ backgroundColor }} className="droppableArea">
+      {canDrop && <p>... PLACEHOLDER -- PUT A BOX HERE --</p>}
+      {isOver && (
+        <MultipleChoiceQuestion
+          newQuestionText={newQuestionText}
+          setNewQuestionText={setNewQuestionText}
+          handleAddQuestion={handleAddQuestion}
+          newQuestionType={newQuestionType}
+        />
+      )}
+      {droppedItems.map((item, index) => (
+        <MultipleChoiceQuestion
+          key={index}
+          newQuestionText={newQuestionText}
+          setNewQuestionText={setNewQuestionText}
+          handleAddQuestion={handleAddQuestion}
+          newQuestionType={item.questionType}
+        />
+      ))}
+    </div>
+  );
+};
+
+// use later??
+
+{
+  /* {newQuestionType === "multipleChoice" && (
         <>
           <div className="container">
             {newQuestionChoicesArray.map((choice, index) => (
@@ -168,15 +229,28 @@ const SurveyFormUI: React.FC<{
             ))}
           </div>
         </div>
-      )}
-      <div className="border-t my-4 border-gray-300" />
-      <div className="container">
-        <button type="submit" className="btnWrapper">
-          Publish Survey
-        </button>
-      </div>
-    </form>
-  );
-};
+      )} */
+}
 
-export default SurveyFormUI;
+{
+  /* <label className="selectLabel">
+        Select an option
+        <select
+          value={newQuestionType}
+          onChange={(e) => setNewQuestionType(e.target.value)}
+          className="selectDropdown"
+        >
+          <option value="">Choose a type of question</option>
+          <option value="writeIn">Write In</option>
+          <option value="multipleChoice">Multiple Choice</option>
+          <option value="starRating">Star Rating</option>
+        </select>
+      </label>
+
+      <MultipleChoiceQuestion
+        newQuestionText={newQuestionText}
+        setNewQuestionText={setNewQuestionText}
+        handleAddQuestion={handleAddQuestion}
+        newQuestionType={newQuestionType}
+      /> */
+}

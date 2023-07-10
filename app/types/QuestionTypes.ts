@@ -27,3 +27,19 @@ export type QuestionType =
   | WriteInQuestionType
   | MultipleChoiceQuestionType
   | StarRatingQuestionType;
+
+export interface SurveyFormProps {
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  questions: QuestionType[];
+  newQuestionType: string;
+  setNewQuestionType: React.Dispatch<React.SetStateAction<string>>;
+  newQuestionText: string;
+  setNewQuestionText: React.Dispatch<React.SetStateAction<string>>;
+  newQuestionChoicesArray: string[];
+  handleAddChoice: (choice: string) => void;
+  handleAddQuestion: (answerType: string) => void;
+  handleSubmit: (event: React.FormEvent) => void;
+}

@@ -75,21 +75,23 @@ const SurveyForm: React.FC<{ onSubmit: (data: any) => void }> = ({
   };
 
   return (
-    <SurveyFormUI
-      title={title}
-      setTitle={setTitle}
-      description={description}
-      setDescription={setDescription}
-      questions={questions}
-      newQuestionType={newQuestionType}
-      setNewQuestionType={setNewQuestionType}
-      newQuestionText={newQuestionText}
-      setNewQuestionText={setNewQuestionText}
-      newQuestionChoicesArray={newQuestionChoicesArray}
-      handleAddChoice={handleAddChoice}
-      handleAddQuestion={handleAddQuestion}
-      handleSubmit={handleSubmit}
-    />
+    <div className="container mx-6">
+      <SurveyFormUI
+        title={title}
+        setTitle={setTitle}
+        description={description}
+        setDescription={setDescription}
+        questions={questions}
+        newQuestionType={newQuestionType}
+        setNewQuestionType={setNewQuestionType}
+        newQuestionText={newQuestionText}
+        setNewQuestionText={setNewQuestionText}
+        newQuestionChoicesArray={newQuestionChoicesArray}
+        handleAddChoice={handleAddChoice}
+        handleAddQuestion={handleAddQuestion}
+        handleSubmit={handleSubmit}
+      />
+    </div>
   );
 };
 

@@ -11,7 +11,7 @@
 }
 
 .inputWrapper {
-  @apply flex justify-center items-center space-x-4;
+  @apply flex items-center space-x-4;
 }
 
 .editIcon {

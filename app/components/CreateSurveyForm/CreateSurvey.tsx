@@ -3,6 +3,9 @@ import SurveyForm from "./SurveyForm";
 import { saveSurveyToFirestore } from "@/app/utils/surveyUtils";
 import { useFirestore } from "@/app/hooks/useFirestore";
 import { auth } from "@/app/firebase/firebaseClient";
+import SurveySidebar from "./SurveySidebar";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 interface SurveyData {
   title: string;
@@ -32,14 +35,19 @@ export default function CreateSurvey() {
   };
 
   return (
-    <>
-      <SurveyForm onSubmit={handleSurveySubmit} />
-      {surveyLink && (
-        <div>
-          <h1>Your survey has been published!</h1>
-          <p>You can share it using this link: {surveyLink}</p>
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex">
+        <SurveySidebar />
+        <div className="flex-grow ml-64">
+          <SurveyForm onSubmit={handleSurveySubmit} />
+          {surveyLink && (
+            <div>
+              <h1>Your survey has been published!</h1>
+              <p>You can share it using this link: {surveyLink}</p>
+            </div>
+          )}
         </div>
-      )}
-    </>
+      </div>
+    </DndProvider>
   );
 }
