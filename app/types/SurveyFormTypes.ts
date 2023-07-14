@@ -3,16 +3,6 @@ export interface BasicInfoData {
   description: string;
 }
 
-export interface BasicInfoProps {
-  title: string;
-  description: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
-  onNext: () => void;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 export interface MultipleChoiceQuestionData {
   question: string;
   choices: ChoiceData[];
@@ -90,4 +80,11 @@ export function isWriteInQuestionData(
   data: QuestionData
 ): data is WriteInQuestionData {
   return "question" in data && !("choices" in data) && !("answerType" in data);
+}
+
+export function isOfType<T extends QuestionData>(
+  data: QuestionData,
+  key: keyof T
+): data is T {
+  return key in data;
 }

@@ -17,7 +17,9 @@ export async function saveSurveyToFirestore(
   addUserDocument: Function,
   addGeneralDocument: Function
 ) {
+  console.log("Before sanitization:", surveyData);
   const sanitizedSurveyData = sanitizeData(surveyData);
+  console.log("After sanitization:", sanitizedSurveyData);
   const userId = auth.currentUser?.uid;
 
   // Add userId to the survey data
@@ -26,9 +28,11 @@ export async function saveSurveyToFirestore(
   try {
     // Save survey to the user's collection
     const userDocRefId = await addUserDocument(sanitizedSurveyData);
+    console.log("User Document ID:", userDocRefId);
 
     // Save survey to the general surveys collection
     const generalDocRefId = await addGeneralDocument(sanitizedSurveyData);
+    console.log("General Document ID:", generalDocRefId);
 
     // Here we're assuming the surveyId should be the same in both collections
     // So we're using the id from the first document reference

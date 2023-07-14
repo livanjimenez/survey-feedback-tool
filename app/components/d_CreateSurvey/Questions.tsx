@@ -1,6 +1,6 @@
 import React from "react";
 
-import { QuestionType } from "@/app/types/QuestionTypes";
+import { QuestionType, MultipleChoiceData } from "@/app/types/QuestionTypes";
 
 interface QuestionProps {
   data: QuestionType;
@@ -12,17 +12,18 @@ const Questions: React.FC<QuestionProps> = ({ data }) => {
       return (
         <div>
           <h2 className="text-xl font-bold mb-2">{data.data.question}</h2>
-          {data.data.choices.map((choice, index) => (
-            <label key={index} className="block">
-              <input
-                type={data.data.answerType}
-                name={data.data.question}
-                value={choice.text}
-                className="mr-2"
-              />
-              {choice.text}
-            </label>
-          ))}
+          {isMultipleChoiceData(data.data) &&
+            data.data.choices.map((choice, index) => (
+              <label key={index} className="block">
+                <input
+                  type={data.data.answerType}
+                  name={data.data.question}
+                  value={choice.text}
+                  className="mr-2"
+                />
+                {choice.text}
+              </label>
+            ))}
         </div>
       );
 
@@ -57,5 +58,9 @@ const Questions: React.FC<QuestionProps> = ({ data }) => {
       return null;
   }
 };
+
+function isMultipleChoiceData(data: any): data is MultipleChoiceData {
+  return data.choices !== undefined;
+}
 
 export default Questions;

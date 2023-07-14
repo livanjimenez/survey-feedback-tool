@@ -1,5 +1,6 @@
 import { useDrag } from "react-dnd";
-import { ListBulletIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import dragImage from "@/app/assets/drag.png";
 
 const itemTypes = {
   QUESTION: "question",
@@ -45,11 +46,17 @@ const DraggableQuestionType: React.FC<{
   return (
     <div
       ref={drag}
-      className={`group flex flex-row block py-3 px-5 hover:bg-gray-600 rounded ${
+      className={`group flex flex-row py-3 px-5 hover:bg-gray-600 rounded ${
         isDragging ? "opacity-50" : ""
       }`}
     >
-      <ListBulletIcon className="opacity-0 group-hover:opacity-100 transition-opacity right-3 top-1/2 w-6 h-6 mr-2" />
+      <Image
+        src={dragImage}
+        alt="Drag Icon"
+        width={24}
+        height={24}
+        className="opacity-0 group-hover:opacity-100 transition-opacity right-3 top-1/2 mr-2"
+      />
       {displayName}
     </div>
   );
