@@ -28,24 +28,17 @@ export default function Dashboard() {
       if (!user) {
         router.push("/login");
       } else {
-        fetchPublicSurveyId();
+        fetchSurveys();
       }
     });
   }, []);
 
   const handleDeleteSurvey = async (surveyId: string) => {
-    // Confirm deletion with the user
-    if (window.confirm("Are you sure you want to delete this survey?")) {
-      try {
-        // Delete the survey from Firestore
-        await deleteDoc(doc(db, "surveys", surveyId));
+    // Delete the survey from Firestore
+    await deleteDoc(doc(db, "surveys", surveyId));
 
-        // Optionally, refresh the surveys list
-        fetchPublicSurveyId();
-      } catch (error) {
-        console.error("Error deleting survey: ", error);
-      }
-    }
+    // Optionally, refresh the surveys list
+    fetchSurveys();
   };
 
   const handleCreateButton = () => {
@@ -60,7 +53,7 @@ export default function Dashboard() {
     survey.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const fetchPublicSurveyId = async () => {
+  const fetchSurveys = async () => {
     const userId = auth.currentUser?.uid;
 
     if (userId) {
@@ -83,8 +76,15 @@ export default function Dashboard() {
     }
   };
 
+  // * Remove padding from the container
+  // * Clicking on icon should expand the survey pill to show UI respected to the icon
+  // * Click icons at https://linktr.ee/admin for reference
+
+  // ? Might have to use a disclosure component for this
+  // ! Brainstorm how I'm going to do this before I start coding
+
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto">
       <button
         className="rounded-full mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         onClick={handleCreateButton}
@@ -93,7 +93,7 @@ export default function Dashboard() {
       </button>
 
       {/**  divider */}
-      <div className="border-t my-4 border-gray-300"></div>
+      <div className="border-t my-4 border-gray-300" />
 
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
         <h1 className="capitalize text-2xl mb-4 sm:mb-0">My Surveys 🔥</h1>
@@ -114,7 +114,10 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <SurveyList surveys={filteredSurveys} onDelete={handleDeleteSurvey} />
+      <SurveyList
+        surveys={filteredSurveys}
+        handleDeleteSurvey={handleDeleteSurvey}
+      />
     </div>
   );
 }

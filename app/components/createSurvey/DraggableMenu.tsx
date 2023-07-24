@@ -1,5 +1,6 @@
 import { useDrag, useDrop } from "react-dnd";
 import QuestionType from "./QuestionType";
+import { v4 as uuidv4 } from "uuid";
 
 // * Possibly will need to use this later
 // import { QuestionType } from "@/app/types/SurveyFormTypes";
@@ -85,6 +86,7 @@ const DroppableArea = ({ questions, addQuestion }: DroppableAreaProps) => {
           return; // invalid question type
       }
       const newQuestion: Question = {
+        id: uuidv4(),
         type: item.type as QuestionTypeEnum,
         data: newQuestionData,
       };
@@ -106,7 +108,7 @@ const DroppableArea = ({ questions, addQuestion }: DroppableAreaProps) => {
     >
       {/* Render the survey questions here */}
       {questions.map((question) => (
-        <QuestionType key={question.type} question={question} />
+        <QuestionType key={question.id} question={question} />
       ))}
     </div>
   );

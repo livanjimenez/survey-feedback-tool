@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Question } from "@/app/types/SurveyFormTypes";
 import WriteInQuestion from "./UI/WriteInQuestion";
+import MultipleChoiceQuestion from "./UI/MultipleChoiceQuestion";
+import StarRatingQuestion from "./UI/StarRatingQuestion";
 
 interface QuestionTypeProps {
   question: Question;
@@ -13,6 +15,7 @@ const QuestionType = ({ question }: QuestionTypeProps) => {
     setValue(value);
   };
 
+  // TODO: implement handleAddQuestion and handleDeleteQuestion
   const handleAddQuestion = (type: string) => {
     console.log(type);
   };
@@ -22,7 +25,6 @@ const QuestionType = ({ question }: QuestionTypeProps) => {
 
   switch (question.type) {
     case "writeIn":
-      // Render write-in question UI
       return (
         <WriteInQuestion
           question={question}
@@ -32,13 +34,26 @@ const QuestionType = ({ question }: QuestionTypeProps) => {
           handleDeleteQuestion={handleDeleteQuestion}
         />
       );
-      break;
     case "multipleChoice":
-      // Render multiple choice question UI
-      break;
+      return (
+        <MultipleChoiceQuestion
+          question={question}
+          value={value}
+          setValue={handleSetValue}
+          handleAddQuestion={handleAddQuestion}
+          handleDeleteQuestion={handleDeleteQuestion}
+        />
+      );
     case "starRating":
-      // Render star rating question UI
-      break;
+      return (
+        <StarRatingQuestion
+          question={question}
+          value={value}
+          setValue={handleSetValue}
+          handleAddQuestion={handleAddQuestion}
+          handleDeleteQuestion={handleDeleteQuestion}
+        />
+      );
     default:
       return null;
   }

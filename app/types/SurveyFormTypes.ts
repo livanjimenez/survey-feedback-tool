@@ -1,8 +1,3 @@
-export interface BasicInfoData {
-  title: string;
-  description: string;
-}
-
 export interface MultipleChoiceQuestionData {
   question: string;
   choices: ChoiceData[];
@@ -44,6 +39,7 @@ export interface SurveyAppearanceProps {
 }
 
 export interface Question {
+  id?: string;
   type: QuestionType;
   data: QuestionData;
 }

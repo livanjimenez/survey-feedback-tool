@@ -1,7 +1,6 @@
 import { Question } from "@/app/types/SurveyFormTypes";
-import { WRITE_IN_QUESTION } from "@/app/constants/index";
 
-interface WriteInQuestionProps {
+interface StarRatingQuestionProps {
   question: Question;
   value: string;
   setValue: (value: string) => void;
@@ -9,20 +8,20 @@ interface WriteInQuestionProps {
   handleDeleteQuestion: (id: string) => void;
 }
 
-const WriteInQuestion = ({
+const StarRatingQuestion = ({
   question,
   value,
   setValue,
   handleAddQuestion,
   handleDeleteQuestion,
-}: WriteInQuestionProps) => {
+}: StarRatingQuestionProps) => {
   return (
     <div className="container">
       <input
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Write In Question"
+        placeholder="Star Rating Question"
         className="inputField mr-2"
       />
       <button
@@ -31,7 +30,7 @@ const WriteInQuestion = ({
         //
         // * QuestionType is writeIn, so we pass "writeIn" to handleAddQuestion
         //
-        onClick={() => handleAddQuestion(WRITE_IN_QUESTION)}
+        onClick={() => handleAddQuestion("")}
       >
         Add Question
       </button>
@@ -46,4 +45,4 @@ const WriteInQuestion = ({
   );
 };
 
-export default WriteInQuestion;
+export default StarRatingQuestion;

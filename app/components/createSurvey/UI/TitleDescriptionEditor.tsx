@@ -25,7 +25,9 @@ const TitleDescriptionEditor = () => {
           </h2>
         )}
         <PencilSquareIcon
-          className="editIcon"
+          className={`editIcon ${
+            isTitleEditing ? "hidden" : ""
+          } hover:opacity-25`}
           onClick={() => setIsTitleEditing(true)}
         />
       </div>
@@ -47,7 +49,9 @@ const TitleDescriptionEditor = () => {
           </p>
         )}
         <PencilSquareIcon
-          className="editIcon"
+          className={`editIcon ${
+            isDescriptionEditing ? "hidden" : ""
+          } hover:opacity-25`}
           onClick={() => setIsDescriptionEditing(true)}
         />
       </div>
