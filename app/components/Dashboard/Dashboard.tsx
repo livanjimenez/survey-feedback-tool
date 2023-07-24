@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { auth, db } from "../../firebase/firebaseClient";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import { auth, db } from '../../firebase/firebaseClient';
+import { useRouter } from 'next/navigation';
 import {
   collection,
   getDocs,
@@ -8,9 +8,9 @@ import {
   query,
   deleteDoc,
   doc,
-} from "firebase/firestore";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import SurveyList from "./SurveyList";
+} from 'firebase/firestore';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import SurveyList from './SurveyList';
 
 interface Survey {
   id: string;
@@ -21,12 +21,12 @@ interface Survey {
 export default function Dashboard() {
   const router = useRouter();
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
-        router.push("/login");
+        router.push('/login');
       } else {
         fetchSurveys();
       }
@@ -35,14 +35,14 @@ export default function Dashboard() {
 
   const handleDeleteSurvey = async (surveyId: string) => {
     // Delete the survey from Firestore
-    await deleteDoc(doc(db, "surveys", surveyId));
+    await deleteDoc(doc(db, 'surveys', surveyId));
 
     // Optionally, refresh the surveys list
     fetchSurveys();
   };
 
   const handleCreateButton = () => {
-    router.push("/create");
+    router.push('/create');
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +50,7 @@ export default function Dashboard() {
   };
 
   const filteredSurveys = surveys.filter((survey) =>
-    survey.title.toLowerCase().includes(searchTerm.toLowerCase())
+    survey.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const fetchSurveys = async () => {
@@ -59,8 +59,8 @@ export default function Dashboard() {
     if (userId) {
       // Query the surveys collection for surveys where userId matches the authenticated user's UID
       const surveyQuery = query(
-        collection(db, "surveys"),
-        where("userId", "==", userId)
+        collection(db, 'surveys'),
+        where('userId', '==', userId),
       );
       const querySnapshot = await getDocs(surveyQuery);
 
@@ -86,7 +86,7 @@ export default function Dashboard() {
   return (
     <div className="container mx-auto">
       <button
-        className="rounded-full mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="rounded-full mt-4 ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         onClick={handleCreateButton}
       >
         Create Survey
