@@ -55,6 +55,9 @@ const TitleDescriptionEditor = () => {
           onClick={() => setIsDescriptionEditing(true)}
         />
       </div>
+
+      {/**  divider */}
+      <div className="border-t my-4 border-gray-300" />
     </div>
   );
 };

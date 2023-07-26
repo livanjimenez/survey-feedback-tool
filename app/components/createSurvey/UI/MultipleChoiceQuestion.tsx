@@ -42,12 +42,6 @@ const MultipleChoiceQuestion = ({
 
   // * deleteChoice is called when the user clicks the delete choice button
   const deleteChoice = (index: number) => {
-    // ? This was implemented by copilot
-    // ? I'm not sure which once is best between the two
-    // const newChoices = [...choices];
-    // newChoices.splice(index, 1);
-    // setChoices(newChoices);
-
     setChoices(choices.filter((_, i) => i !== index));
   };
 

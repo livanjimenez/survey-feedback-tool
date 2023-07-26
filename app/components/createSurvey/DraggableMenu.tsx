@@ -31,12 +31,15 @@ interface DroppableAreaProps {
 // TODO:: refactor this later
 const questionTypes = ["writeIn", "multipleChoice", "starRating"];
 
+// * Main container for draggable menu layout
 const DraggableMenu = ({ questions, addQuestion }: DraggableMenuProps) => {
   return (
     <div>
       {/* List of question types that can be dragged */}
       {questionTypes.map((type) => (
-        <DraggableQuestionType type={type} key={type} />
+        <div className="my-2 ml-2">
+          <DraggableQuestionType type={type} key={type} />
+        </div>
       ))}
       {/* Area where question types can be dropped to add a new question */}
       <DroppableArea questions={questions} addQuestion={addQuestion} />
@@ -54,8 +57,11 @@ const DraggableQuestionType = ({ type }: DraggableQuestionTypeProps) => {
   });
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      {/* You might replace this with more detailed UI for each question type */}
+    <div
+      ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      className="inline-flex px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+    >
       {type}
     </div>
   );
@@ -99,6 +105,9 @@ const DroppableArea = ({ questions, addQuestion }: DroppableAreaProps) => {
 
   return (
     <div
+      // ! style the drop area
+      // * dashed border vs dotted border for styling (probably dotted)
+
       ref={drop}
       style={{
         backgroundColor: isOver ? "lightblue" : "white",
