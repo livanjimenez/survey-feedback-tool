@@ -34,15 +34,16 @@ const questionTypes = ["writeIn", "multipleChoice", "starRating"];
 // * Main container for draggable menu layout
 const DraggableMenu = ({ questions, addQuestion }: DraggableMenuProps) => {
   return (
-    <div>
-      {/* List of question types that can be dragged */}
-      {questionTypes.map((type) => (
-        <div className="my-2 ml-2">
+    <div className="flex">
+      <div className="flex flex-col">
+        {questionTypes.map((type) => (
           <DraggableQuestionType type={type} key={type} />
-        </div>
-      ))}
-      {/* Area where question types can be dropped to add a new question */}
-      <DroppableArea questions={questions} addQuestion={addQuestion} />
+        ))}
+      </div>
+
+      <div className="grow mr-4 ml-4">
+        <DroppableArea questions={questions} addQuestion={addQuestion} />
+      </div>
     </div>
   );
 };
@@ -57,13 +58,14 @@ const DraggableQuestionType = ({ type }: DraggableQuestionTypeProps) => {
   });
 
   return (
-    <div
+    <button
+      type="button"
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1 }}
-      className="inline-flex px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+      className="my-2 ml-2 mr-2 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
     >
       {type}
-    </div>
+    </button>
   );
 };
 
@@ -103,19 +105,20 @@ const DroppableArea = ({ questions, addQuestion }: DroppableAreaProps) => {
     }),
   });
 
+  // ? UI needs work, its highlighting the whole area
+
   return (
     <div
-      // ! style the drop area
-      // * dashed border vs dotted border for styling (probably dotted)
-
       ref={drop}
       style={{
-        backgroundColor: isOver ? "lightblue" : "white",
+        backgroundColor: isOver ? "lightGray" : "",
         minHeight: "50px",
-        border: "1px solid black",
+        borderStyle: isOver ? "dashed" : "solid",
+        borderWidth: "2px",
+        borderColor: "indigo",
+        padding: "10px",
       }}
     >
-      {/* Render the survey questions here */}
       {questions.map((question) => (
         <QuestionType key={question.id} question={question} />
       ))}

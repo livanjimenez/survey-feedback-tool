@@ -34,7 +34,7 @@ const PublishButton = () => {
   };
 
   return (
-    <>
+    <div className="my-4 ml-2">
       <button className="btnWrapper" type="button" onClick={handleClick}>
         Publish
       </button>
@@ -46,7 +46,7 @@ const PublishButton = () => {
           <a href={surveyLink}>{surveyLink}</a>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
