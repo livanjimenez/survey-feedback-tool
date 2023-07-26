@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { auth, db } from '../../firebase/firebaseClient';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { auth, db } from "../../firebase/firebaseClient";
+import { useRouter } from "next/navigation";
 import {
   collection,
   getDocs,
@@ -8,9 +8,9 @@ import {
   query,
   deleteDoc,
   doc,
-} from 'firebase/firestore';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import SurveyList from './SurveyList';
+} from "firebase/firestore";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import SurveyList from "./SurveyList";
 
 interface Survey {
   id: string;
@@ -21,12 +21,12 @@ interface Survey {
 export default function Dashboard() {
   const router = useRouter();
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
-        router.push('/login');
+        router.push("/login");
       } else {
         fetchSurveys();
       }
@@ -35,14 +35,14 @@ export default function Dashboard() {
 
   const handleDeleteSurvey = async (surveyId: string) => {
     // Delete the survey from Firestore
-    await deleteDoc(doc(db, 'surveys', surveyId));
+    await deleteDoc(doc(db, "surveys", surveyId));
 
     // Optionally, refresh the surveys list
     fetchSurveys();
   };
 
   const handleCreateButton = () => {
-    router.push('/create');
+    router.push("/create");
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,17 +50,16 @@ export default function Dashboard() {
   };
 
   const filteredSurveys = surveys.filter((survey) =>
-    survey.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    survey.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const fetchSurveys = async () => {
     const userId = auth.currentUser?.uid;
 
     if (userId) {
-      // Query the surveys collection for surveys where userId matches the authenticated user's UID
       const surveyQuery = query(
-        collection(db, 'surveys'),
-        where('userId', '==', userId),
+        collection(db, "surveys"),
+        where("userId", "==", userId)
       );
       const querySnapshot = await getDocs(surveyQuery);
 
@@ -75,13 +74,6 @@ export default function Dashboard() {
       setSurveys(surveysData);
     }
   };
-
-  // * Remove padding from the container
-  // * Clicking on icon should expand the survey pill to show UI respected to the icon
-  // * Click icons at https://linktr.ee/admin for reference
-
-  // ? Might have to use a disclosure component for this
-  // ! Brainstorm how I'm going to do this before I start coding
 
   return (
     <div className="container mx-auto">

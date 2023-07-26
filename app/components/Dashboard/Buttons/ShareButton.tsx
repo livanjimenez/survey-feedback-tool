@@ -32,7 +32,7 @@ const ShareButton = ({ surveyId }: ShareButtonProps) => {
       <div>
         <ArrowUpOnSquareIcon
           className={`h-6 w-6 cursor-pointer ml-4 ${
-            isOpen ? "text-purple-500" : "text-gray-500 hover:text-purple-500"
+            isOpen ? "text-purple-500 " : "text-gray-500 hover:text-purple-500"
           }`}
           onClick={openModal}
         />
