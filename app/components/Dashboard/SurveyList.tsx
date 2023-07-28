@@ -40,7 +40,7 @@ export default function SurveyList({
         {surveys.map((survey) => (
           <div
             key={survey.id}
-            className="bg-white shadow-lg rounded-lg my-4 relative "
+            className="bg-white shadow-md rounded-lg my-4 relative "
           >
             <div className="p-6">
               <div className="flex justify-between ">

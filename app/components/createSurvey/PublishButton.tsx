@@ -34,10 +34,19 @@ const PublishButton = () => {
   };
 
   return (
-    <div className="my-4 ml-2">
-      <button className="btnWrapper" type="button" onClick={handleClick}>
+    <div className="flex justify-center">
+      <button
+        className="mt-6 items-center px-10 py-2 border border-transparent text-lg font-medium rounded-md shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500;"
+        type="button"
+        onClick={handleClick}
+      >
         Publish
       </button>
+      {/*
+       *
+       * TODO:: Style this later
+       *
+       */}
       {surveyLink && (
         <div>
           <p>
