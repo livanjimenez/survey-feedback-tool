@@ -49,7 +49,7 @@ export default function SurveyList({
                   <p className="text-gray-600">{survey.description}</p>
                 </div>
                 <div className="flex my-1">
-                  <EditButton surveyId={survey.id} />
+                  {/* <EditButton surveyId={survey.id} /> */}
                   <div className="flex my-2">
                     <ShareButton surveyId={survey.id} />
                     <DeleteButton
